@@ -1,21 +1,91 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
+<div class="header">
+  <div class="clickMe"
+  (click)="clickMe()">
+    Click me to display the products
+  </div>
+  <div class="myCart"
+  (click)="clickMyCart()">
+    <div>
+      My Cart
+    </div>
+  </div>
 </div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/cli">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
 
-<router-outlet></router-outlet>
+<div class="productContainer" *ngIf="products.length !== 0">
+  <div class="productList" *ngFor="let product of products"
+  [style.background-color]="highlightProduct(product.id)">
+    <div class="productImg">
+      <img src= "{{ product.image }}">
+    </div>
+
+    <div class="productDetail">
+      ID: {{ product.id }} <br>
+      Description: {{ product.description }} <br>
+      Price: {{ product.price }}
+    </div>
+
+    <div class="selectProduct">
+      <div class = "qty">
+          <div
+          (click)="minusQty(product.id)">
+            -
+          </div>
+          <div>
+            {{ tempQty[product.id] }}
+          </div>
+          <div
+          (click)="addQty(product.id)">
+            +
+          </div>
+      </div>
+      
+      <button *ngIf="tempQty[product.id] > 0"
+          [style.display]="hideSelectButton(product.id)"
+        (click)="addToTempCart(product.id)">
+        Select
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="myCartContainer hide" *ngIf="myCart.length !== 0">
+    <div class="productList" *ngFor="let item of myCart">
+      <div class="productImg">
+        <img src= "{{ item.image }}">
+      </div>
+    
+      <div class="productDetail">
+        ID: {{ item.id }} <br>
+        Description: {{ item.description }} <br>
+        Price: {{ item.price }} <br>
+        Qty: {{ item.qty }}
+      </div>
+    
+      <div class="removeProduct">        
+        <button
+        (click)="removeFromCart(item.id)">
+          Remove
+        </button>
+      </div>
+    </div>
+</div>
+
+<div class="footer">
+  <div>
+    <div *ngIf="myCart.length !== 0"
+    (click)="clearMyCart()">
+      Clear My Cart
+    </div>
+  </div>
+  <div>
+    <div *ngIf="tempCart.length !== 0"
+    (click)="addToCart()">
+      Add To Cart
+    </div>
+    </div>
+  <div>
+    Total Price: {{ totalPrice }}
+  </div>
+</div>
+
+
